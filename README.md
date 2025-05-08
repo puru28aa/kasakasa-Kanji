@@ -1,5 +1,8 @@
 # kasakasa-Kanji
 
+Preview<br>
+https://puru28aa.github.io/kasakasa-Kanji/
+
 "Four Dots Kanji Animation".
 
 This interactive web application allows users to input Japanese kanji characters featuring "four dots" (「、、、、」) beneath them. The kanji characters move randomly across the screen, while the four dots vibrate horizontally, creating a lively, insect-like effect. Users can choose between random kanji selection or manually enter up to four kanji. Additional customization options include adjusting movement speed, offset position, and the background color.
