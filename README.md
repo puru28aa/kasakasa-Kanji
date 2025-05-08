@@ -1,6 +1,6 @@
 # kasakasa-Kanji
 
-!["prev-gif"]("prev.gif")
+!["prev-gif"](prev.gif)
 
 Preview<br>
 https://puru28aa.github.io/kasakasa-Kanji/
