@@ -27,7 +27,7 @@
         <label>長方形色: <input type="color" id="rectColor" value="#2f4d75"></label>
         <label>オフセットX: <input type="number" id="offsetX" value="0"></label>
         <label>オフセットY: <input type="number" id="offsetY" value="0"></label><br>
-        <label>スピード: <input type="number" id="speedM" value="1" step="1"></label>
+        <label>スピード:<input type="number" id="speedM" value="1"></label>
     </div>
     <canvas id="canvas"></canvas>
 
@@ -43,24 +43,26 @@
         let animationId = null;
 
         class MovingKanji {
-            constructor(char, x, y) {
+            constructor(char, x, y, speedM) {
                 this.char = char;
                 this.x = x;
                 this.y = y;
-                this.speedX = Math.random();
-                this.speedY = Math.random();
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
                 this.dotOffset = 0;
                 this.dotDirection = 1;
+                this.dotSpeed = Math.random() * 3 + 1;
+                this.kanjiSpeed = Math.random() * speedM + 0.5;
             }
 
-            update(speedM) {
-                this.x += this.speedX * speedM;
-                this.y += this.speedY * speedM;
+            update() {
+                this.x += this.speedX * this.kanjiSpeed;
+                this.y += this.speedY * this.kanjiSpeed;
 
                 if (this.x < 24 || this.x > canvas.width - 48) this.speedX *= -1;
                 if (this.y < 24 || this.y > canvas.height - 48) this.speedY *= -1;
 
-                this.dotOffset += this.dotDirection * 3;
+                this.dotOffset += this.dotDirection * this.dotSpeed;
                 if (this.dotOffset > 5 || this.dotOffset < -5) this.dotDirection *= -1;
             }
 
@@ -73,13 +75,11 @@
                 ctx.fillStyle = "white";
                 ctx.fillText(this.char, this.x, this.y);
 
-                // 背景色と同色の長方形
                 ctx.fillStyle = rectColor;
-                ctx.fillRect(this.x + offsetX, this.y + offsetY -8, 60, 16);
+                ctx.fillRect(this.x + offsetX, this.y + offsetY - 8, 60, 16);
 
                 ctx.font = "38px serif";
                 ctx.fillStyle = "white";
-                // 左右に振動
                 ctx.fillText("′", this.x + 3 + (this.dotOffset * 0.8), this.y + 28);
                 ctx.fillText("、", this.x + 15 - (this.dotOffset * 1.4), this.y + 5);
                 ctx.fillText("、", this.x + 30 + (this.dotOffset * 2.5), this.y + 5);
@@ -92,22 +92,21 @@
             const randomCheck = document.getElementById("randomCheck").checked;
             const userKanji = document.getElementById("kanjiInput").value.trim();
             const speedM = parseFloat(document.getElementById("speedM").value);
+          
             activeKanji = randomCheck ? [...defaultKanji].sort(() => Math.random() - 0.5).slice(0, 4) : [...userKanji].slice(0, 4);
             movingKanji = activeKanji.map((char, index) => new MovingKanji(char, 200 + index * 150, 300, speedM));
-            animate(speedM);
+            animate();
         }
 
-        function animate(speedM) {
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             movingKanji.forEach(kanji => {
-                kanji.update(speedM);
+                kanji.update();
                 kanji.draw();
             });
-            
-            animationId = requestAnimationFrame(() => animate(speedM));
+            animationId = requestAnimationFrame(animate);
         }
-        
+
         function changeColor() {
           const color1 = document.getElementById('color1').value;
           document.body.style.background = color1;
